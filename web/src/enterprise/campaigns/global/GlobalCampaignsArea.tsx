@@ -10,6 +10,7 @@ import { CampaignsSiteAdminMarketingPage } from './marketing/CampaignsSiteAdminM
 import { CampaignsUserMarketingPage } from './marketing/CampaignsUserMarketingPage'
 import { AuthenticatedUser } from '../../../auth'
 import { CampaignListPage } from '../list/CampaignListPage'
+import { CreateCampaignPage } from '../create/CreateCampaignPage'
 
 interface Props
     extends RouteComponentProps<{}>,
@@ -55,6 +56,11 @@ export const AuthenticatedCampaignsArea = withAuthenticatedUser<AuthenticatedPro
                     <Route
                         render={props => <CampaignListPage {...outerProps} {...props} />}
                         path={match.url}
+                        exact={true}
+                    />
+                    <Route
+                        path={`${match.url}/create`}
+                        render={props => <CreateCampaignPage {...outerProps} {...props} />}
                         exact={true}
                     />
                 </Switch>
