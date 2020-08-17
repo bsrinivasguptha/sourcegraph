@@ -96,6 +96,7 @@ export const CampaignChangesets: React.FunctionComponent<Props> = ({
                         externalState: changesetFilters.externalState,
                         reviewState: changesetFilters.reviewState,
                         checkState: changesetFilters.checkState,
+                        publicationState: null,
                         ...(onlyOpen ? { externalState: ChangesetExternalState.OPEN } : {}),
                         first: args.first ?? null,
                         campaign: campaignID,
@@ -170,7 +171,9 @@ export const CampaignChangesets: React.FunctionComponent<Props> = ({
     return (
         <>
             {!hideFilters && (
-                <ChangesetFilterRow history={history} location={location} onFiltersChange={setChangesetFilters} />
+                <div className="d-flex justify-content-end">
+                    <ChangesetFilterRow history={history} location={location} onFiltersChange={setChangesetFilters} />
+                </div>
             )}
             <div className="list-group position-relative" ref={nextContainerElement}>
                 <FilteredConnection<ChangesetFields, Omit<ChangesetNodeProps, 'node'>>

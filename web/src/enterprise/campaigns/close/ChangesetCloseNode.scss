@@ -1,0 +1,35 @@
+.changeset-close-node {
+    &__separator {
+        // Make it full width in the current row.
+        grid-column: 1 / -1;
+        border-top: 1px solid $color-light-bg-2;
+    }
+}
+
+.theme-dark {
+    .changeset-close-node {
+        &__separator {
+            border-color: $color-light-bg-5;
+        }
+    }
+}
+
+.will-close {
+    color: black;
+    animation: flash-red 2s ease-in-out;
+}
+
+@keyframes flash-red {
+    0% {
+        color: black;
+    }
+    25% {
+        color: red;
+    }
+    75% {
+        color: red;
+    }
+    100% {
+        color: black;
+    }
+}

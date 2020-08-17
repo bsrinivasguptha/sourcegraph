@@ -160,6 +160,7 @@ export const queryChangesets = ({
     externalState,
     reviewState,
     checkState,
+    publicationState,
 }: CampaignChangesetsVariables): Observable<
     (CampaignChangesetsResult['node'] & { __typename: 'Campaign' })['changesets']
 > =>
@@ -171,6 +172,7 @@ export const queryChangesets = ({
                 $externalState: ChangesetExternalState
                 $reviewState: ChangesetReviewState
                 $checkState: ChangesetCheckState
+                $publicationState: ChangesetPublicationState
             ) {
                 node(id: $campaign) {
                     __typename
@@ -178,6 +180,7 @@ export const queryChangesets = ({
                         changesets(
                             first: $first
                             externalState: $externalState
+                            publicationState: $publicationState
                             reviewState: $reviewState
                             checkState: $checkState
                         ) {
@@ -196,7 +199,7 @@ export const queryChangesets = ({
 
             ${changesetFieldsFragment}
         `,
-        variables: { campaign, first, externalState, reviewState, checkState },
+        variables: { campaign, first, externalState, reviewState, checkState, publicationState },
     }).pipe(
         map(dataOrThrowErrors),
         map(({ node }) => {
