@@ -8,7 +8,7 @@ export interface CampaignCloseHeaderProps {
 
 export const CampaignCloseHeader: React.FunctionComponent<CampaignCloseHeaderProps> = ({ nodes, totalCount }) => (
     <>
-        <div className="changeset-spec-list-header__title mb-2">
+        <div className="campaign-close-header__title mb-2">
             <strong>
                 Displaying {nodes.length}
                 {totalCount && <> of {totalCount}</>} changesets
