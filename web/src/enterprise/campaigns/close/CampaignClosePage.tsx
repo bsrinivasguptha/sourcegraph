@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useEffect } from 'react'
+import React, { useCallback, useMemo, useEffect, useState } from 'react'
 import * as H from 'history'
 import { PageTitle } from '../../../components/PageTitle'
 import { CampaignHeader } from '../detail/CampaignHeader'
@@ -102,6 +102,7 @@ export const CampaignClosePage: React.FunctionComponent<CampaignClosePageProps> 
                 reviewState: null,
                 first: args.first ?? null,
                 campaign: campaignID,
+                onlyCreatedByThisCampaign: true,
             }).pipe(repeatWhen(notifier => notifier.pipe(delay(5000)))),
         [campaignID, queryChangesets]
     )
@@ -160,11 +161,19 @@ export const CampaignClosePage: React.FunctionComponent<CampaignClosePageProps> 
         componentRerenders.next()
     }, [componentRerenders, hoverState])
 
+    const [closeChangesets, setCloseChangesets] = useState<boolean>(false)
+
     return (
         <>
             <PageTitle title="Preview close" />
             <CampaignHeader name="awesome-campaign" />
-            <CampaignCloseAlert />
+            <CampaignCloseAlert
+                campaignID={campaignID}
+                closeChangesets={closeChangesets}
+                setCloseChangesets={setCloseChangesets}
+                history={history}
+                location={location}
+            />
             <h2>Closing the campaign will close the following changesets:</h2>
             <div className="list-group position-relative" ref={nextContainerElement}>
                 <FilteredConnection<ChangesetFields, Omit<ChangesetCloseNodeProps, 'node'>>
