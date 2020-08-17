@@ -38,28 +38,8 @@ import { useObservable } from '../../../../../shared/src/util/useObservable'
 import { getModeFromPath } from '../../../../../shared/src/languages'
 import { WebHoverOverlay } from '../../../components/shared'
 import { TelemetryProps } from '../../../../../shared/src/telemetry/telemetryService'
-
-export interface CampaignCloseHeaderProps {
-    nodes: ChangesetFields[]
-    totalCount?: number | null
-}
-
-export const CampaignCloseHeader: React.FunctionComponent<CampaignCloseHeaderProps> = ({ nodes, totalCount }) => (
-    <>
-        <div className="changeset-spec-list-header__title mb-2">
-            <strong>
-                Displaying {nodes.length}
-                {totalCount && <> of {totalCount}</>} changesets
-            </strong>
-        </div>
-        <span />
-        <h5 className="text-uppercase text-center text-nowrap text-muted">Action</h5>
-        <h5 className="text-uppercase text-nowrap text-muted">Changeset information</h5>
-        <h5 className="text-uppercase text-center text-nowrap text-muted">Check state</h5>
-        <h5 className="text-uppercase text-center text-nowrap text-muted">Review state</h5>
-        <h5 className="text-uppercase text-right text-nowrap text-muted">Changes</h5>
-    </>
-)
+import { closeCampaign as _closeCampaign } from './backend'
+import { CampaignCloseHeader } from './CampaignCloseHeader'
 
 export interface CampaignClosePageProps
     extends ThemeProps,
@@ -77,6 +57,8 @@ export interface CampaignClosePageProps
     queryChangesets?: typeof _queryChangesets
     /** For testing only. */
     queryExternalChangesetWithFileDiffs?: typeof _queryExternalChangesetWithFileDiffs
+    /** For testing only. */
+    closeCampaign?: typeof _closeCampaign
 }
 
 export const CampaignClosePage: React.FunctionComponent<CampaignClosePageProps> = ({
@@ -91,6 +73,7 @@ export const CampaignClosePage: React.FunctionComponent<CampaignClosePageProps> 
     telemetryService,
     queryChangesets = _queryChangesets,
     queryExternalChangesetWithFileDiffs,
+    closeCampaign,
     willClose,
 }) => {
     const queryChangesetsConnection = useCallback(
@@ -173,6 +156,7 @@ export const CampaignClosePage: React.FunctionComponent<CampaignClosePageProps> 
                 setCloseChangesets={setCloseChangesets}
                 history={history}
                 location={location}
+                closeCampaign={closeCampaign}
             />
             <h2>Closing the campaign will close the following changesets:</h2>
             <div className="list-group position-relative" ref={nextContainerElement}>

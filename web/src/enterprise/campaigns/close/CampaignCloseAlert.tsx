@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import * as H from 'history'
-import { closeCampaign } from './backend'
+import { closeCampaign as _closeCampaign } from './backend'
 import { LoadingSpinner } from '@sourcegraph/react-loading-spinner'
 import { isErrorLike, asError } from '../../../../../shared/src/util/errors'
 import { ErrorAlert } from '../../../components/alerts'
@@ -12,6 +12,8 @@ export interface CampaignCloseAlertProps {
     setCloseChangesets: (newValue: boolean) => void
     history: H.History
     location: H.Location
+    /** For testing only. */
+    closeCampaign?: typeof _closeCampaign
 }
 
 export const CampaignCloseAlert: React.FunctionComponent<CampaignCloseAlertProps> = ({
@@ -20,6 +22,7 @@ export const CampaignCloseAlert: React.FunctionComponent<CampaignCloseAlertProps
     setCloseChangesets,
     history,
     location,
+    closeCampaign = _closeCampaign,
 }) => {
     const onChangeCloseChangesets = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
         event => {
@@ -39,7 +42,7 @@ export const CampaignCloseAlert: React.FunctionComponent<CampaignCloseAlertProps
         } catch (error) {
             setIsClosing(asError(error))
         }
-    }, [history, location, closeChangesets, campaignID])
+    }, [history, location, closeChangesets, closeCampaign, campaignID])
     return (
         <>
             <div className="card shadow mb-3">

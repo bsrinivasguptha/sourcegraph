@@ -3,20 +3,19 @@ import {
     HiddenExternalChangesetInfoCell,
     HiddenExternalChangesetInfoCellProps,
 } from '../detail/changesets/HiddenExternalChangesetNode'
-import { ChangesetCloseActionClose, ChangesetCloseActionKept } from './ChangesetCloseAction'
+import { ChangesetCloseActionKept } from './ChangesetCloseAction'
 
 export interface HiddenExternalChangesetCloseNodeProps {
     node: HiddenExternalChangesetInfoCellProps['node']
-    willClose: boolean
 }
 
 export const HiddenExternalChangesetCloseNode: React.FunctionComponent<HiddenExternalChangesetCloseNodeProps> = ({
     node,
-    willClose,
 }) => (
     <>
         <span />
-        {willClose ? <ChangesetCloseActionClose /> : <ChangesetCloseActionKept />}
+        {/* Hidden changesets are always untouched, so the action will always be "kept". */}
+        <ChangesetCloseActionKept />
         <HiddenExternalChangesetInfoCell node={node} />
         <span />
         <span />

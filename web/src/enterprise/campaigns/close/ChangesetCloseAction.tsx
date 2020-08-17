@@ -13,7 +13,7 @@ export const ChangesetCloseActionClose: React.FunctionComponent<{}> = () => (
 )
 export const ChangesetCloseActionKept: React.FunctionComponent<{}> = () => (
     <div className={iconClassNames}>
-        <PlayCircleOutlineIcon data-tooltip="This changeset will NOT be close on the code host when the campaign is closed." />
+        <PlayCircleOutlineIcon data-tooltip="This changeset will NOT be closed on the code host when the campaign is closed." />
         <span className="text-muted">Kept open</span>
     </div>
 )
