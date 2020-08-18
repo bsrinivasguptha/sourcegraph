@@ -86,10 +86,10 @@ export const CampaignClosePage: React.FunctionComponent<CampaignClosePageProps> 
             />
             <CampaignCloseAlert
                 campaignID={campaignID}
+                campaignURL={campaign.url}
                 closeChangesets={closeChangesets}
                 setCloseChangesets={setCloseChangesets}
                 history={history}
-                location={location}
                 closeCampaign={closeCampaign}
                 viewerCanAdminister={campaign.viewerCanAdminister}
             />

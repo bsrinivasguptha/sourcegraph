@@ -8,22 +8,23 @@ import { Scalars } from '../../../graphql-operations'
 
 export interface CampaignCloseAlertProps {
     campaignID: Scalars['ID']
+    campaignURL: string
     closeChangesets: boolean
     viewerCanAdminister: boolean
     setCloseChangesets: (newValue: boolean) => void
     history: H.History
-    location: H.Location
+
     /** For testing only. */
     closeCampaign?: typeof _closeCampaign
 }
 
 export const CampaignCloseAlert: React.FunctionComponent<CampaignCloseAlertProps> = ({
     campaignID,
+    campaignURL,
     closeChangesets,
     setCloseChangesets,
     viewerCanAdminister,
     history,
-    location,
     closeCampaign = _closeCampaign,
 }) => {
     const onChangeCloseChangesets = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
@@ -33,18 +34,18 @@ export const CampaignCloseAlert: React.FunctionComponent<CampaignCloseAlertProps
         [setCloseChangesets]
     )
     const onCancel = useCallback<React.MouseEventHandler>(() => {
-        history.push(location.pathname.replace('/close', ''))
-    }, [history, location])
+        history.push(campaignURL)
+    }, [history, campaignURL])
     const [isClosing, setIsClosing] = useState<boolean | Error>(false)
     const onClose = useCallback<React.MouseEventHandler>(async () => {
         setIsClosing(true)
         try {
             await closeCampaign({ campaign: campaignID, closeChangesets })
-            history.push(location.pathname.replace('/close', ''))
+            history.push(campaignURL)
         } catch (error) {
             setIsClosing(asError(error))
         }
-    }, [history, location, closeChangesets, closeCampaign, campaignID])
+    }, [history, closeChangesets, closeCampaign, campaignID, campaignURL])
     return (
         <>
             <div className="card shadow mb-3">

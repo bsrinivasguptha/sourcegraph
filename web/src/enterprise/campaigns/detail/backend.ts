@@ -23,6 +23,7 @@ const campaignFragment = gql`
     fragment CampaignFields on Campaign {
         __typename
         id
+        url
         name
         namespace {
             namespaceName
