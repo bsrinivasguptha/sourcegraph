@@ -7,18 +7,9 @@ import { ActionItemAction } from '../../../../../../shared/src/actions/ActionIte
 import { ExtensionsControllerProps } from '../../../../../../shared/src/extensions/controller'
 import * as H from 'history'
 import React, { useState, useCallback } from 'react'
-import { LinkOrSpan } from '../../../../../../shared/src/components/LinkOrSpan'
-import ExternalLinkIcon from 'mdi-react/ExternalLinkIcon'
-import { ChangesetLabel } from './ChangesetLabel'
-import { Link } from '../../../../../../shared/src/components/Link'
-import { ChangesetLastSynced } from './ChangesetLastSynced'
 import { DiffStat } from '../../../../components/diff/DiffStat'
 import { queryExternalChangesetWithFileDiffs as _queryExternalChangesetWithFileDiffs } from '../backend'
-import {
-    ChangesetExternalState,
-    ExternalChangesetFields,
-    ChangesetPublicationState,
-} from '../../../../graphql-operations'
+import { ExternalChangesetFields } from '../../../../graphql-operations'
 import ChevronRightIcon from 'mdi-react/ChevronRightIcon'
 import ChevronDownIcon from 'mdi-react/ChevronDownIcon'
 import { ChangesetStatusCell } from './ChangesetStatusCell'
@@ -26,6 +17,7 @@ import { ChangesetCheckStatusCell } from './ChangesetCheckStatusCell'
 import { ChangesetReviewStatusCell } from './ChangesetReviewStatusCell'
 import { ErrorAlert } from '../../../../components/alerts'
 import { ChangesetFileDiff } from './ChangesetFileDiff'
+import { ExternalChangesetInfoCell } from './ExternalChangesetInfoCell'
 
 export interface ExternalChangesetNodeProps extends ThemeProps {
     node: ExternalChangesetFields
@@ -102,62 +94,3 @@ export const ExternalChangesetNode: React.FunctionComponent<ExternalChangesetNod
         </>
     )
 }
-
-export interface ExternalChangesetInfoCellProps {
-    node: ExternalChangesetFields
-    viewerCanAdminister: boolean
-    campaignUpdates?: Pick<Observer<void>, 'next'>
-}
-
-export const ExternalChangesetInfoCell: React.FunctionComponent<ExternalChangesetInfoCellProps> = ({
-    node,
-    viewerCanAdminister,
-    campaignUpdates,
-}) => (
-    <div className="d-flex flex-column">
-        <div className="m-0 mb-2">
-            <h3 className="m-0 d-inline">
-                <LinkOrSpan
-                    /* Deleted changesets most likely don't exist on the codehost anymore and would return 404 pages */
-                    to={
-                        node.externalURL && node.externalState !== ChangesetExternalState.DELETED
-                            ? node.externalURL.url
-                            : undefined
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    {node.title}
-                    {node.externalID && <>(#{node.externalID}) </>}
-                    {node.externalURL && node.externalState !== ChangesetExternalState.DELETED && (
-                        <>
-                            {' '}
-                            <ExternalLinkIcon size="1rem" />
-                        </>
-                    )}
-                </LinkOrSpan>
-            </h3>
-            {node.labels.length > 0 && (
-                <span className="ml-2">
-                    {node.labels.map(label => (
-                        <ChangesetLabel label={label} key={label.text} />
-                    ))}
-                </span>
-            )}
-        </div>
-        <div>
-            <strong className="mr-2">
-                <Link to={node.repository.url} target="_blank" rel="noopener noreferrer">
-                    {node.repository.name}
-                </Link>
-            </strong>
-            {node.publicationState === ChangesetPublicationState.PUBLISHED && (
-                <ChangesetLastSynced
-                    changeset={node}
-                    viewerCanAdminister={viewerCanAdminister}
-                    campaignUpdates={campaignUpdates}
-                />
-            )}
-        </div>
-    </div>
-)

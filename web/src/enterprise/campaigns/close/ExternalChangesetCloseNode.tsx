@@ -4,7 +4,6 @@ import * as H from 'history'
 import React, { useState, useCallback } from 'react'
 import ChevronRightIcon from 'mdi-react/ChevronRightIcon'
 import ChevronDownIcon from 'mdi-react/ChevronDownIcon'
-import { ExternalChangesetInfoCell } from '../detail/changesets/ExternalChangesetNode'
 import { ThemeProps } from '../../../../../shared/src/theme'
 import { ExternalChangesetFields } from '../../../graphql-operations'
 import { RepoSpec, RevisionSpec, FileSpec, ResolvedRevisionSpec } from '../../../../../shared/src/util/url'
@@ -18,6 +17,7 @@ import { ErrorAlert } from '../../../components/alerts'
 import { ChangesetFileDiff } from '../detail/changesets/ChangesetFileDiff'
 import { queryExternalChangesetWithFileDiffs as _queryExternalChangesetWithFileDiffs } from '../detail/backend'
 import { ChangesetCloseActionClose, ChangesetCloseActionKept } from './ChangesetCloseAction'
+import { ExternalChangesetInfoCell } from '../detail/changesets/ExternalChangesetInfoCell'
 
 export interface ExternalChangesetCloseNodeProps extends ThemeProps {
     node: ExternalChangesetFields
