@@ -20,26 +20,19 @@ import { ThemeProps } from '../../../../../shared/src/theme'
 import { PlatformContextProps } from '../../../../../shared/src/platform/context'
 import { ExtensionsControllerProps } from '../../../../../shared/src/extensions/controller'
 import { repeatWhen, withLatestFrom, map, filter, delay } from 'rxjs/operators'
-import { createHoverifier, HoveredToken } from '@sourcegraph/codeintellify'
-import {
-    RepoSpec,
-    RevisionSpec,
-    FileSpec,
-    ResolvedRevisionSpec,
-    UIPositionSpec,
-    ModeSpec,
-} from '../../../../../shared/src/util/url'
+import { createHoverifier } from '@sourcegraph/codeintellify'
+import { RepoSpec, RevisionSpec, FileSpec, ResolvedRevisionSpec } from '../../../../../shared/src/util/url'
 import { HoverMerged } from '../../../../../shared/src/api/client/types/hover'
 import { ActionItemAction } from '../../../../../shared/src/actions/ActionItem'
 import { isDefined, property } from '../../../../../shared/src/util/types'
 import { getHover, getDocumentHighlights } from '../../../backend/features'
 import { getHoverActions } from '../../../../../shared/src/hover/actions'
 import { useObservable } from '../../../../../shared/src/util/useObservable'
-import { getModeFromPath } from '../../../../../shared/src/languages'
 import { WebHoverOverlay } from '../../../components/shared'
 import { TelemetryProps } from '../../../../../shared/src/telemetry/telemetryService'
 import { closeCampaign as _closeCampaign } from './backend'
 import { CampaignCloseHeader } from './CampaignCloseHeader'
+import { getLSPTextDocumentPositionParameters } from '../utils'
 
 export interface CampaignClosePageProps
     extends ThemeProps,
@@ -51,7 +44,6 @@ export interface CampaignClosePageProps
     history: H.History
     location: H.Location
     campaignUpdates: Subject<void>
-    willClose: boolean
 
     /** For testing only. */
     queryChangesets?: typeof _queryChangesets
@@ -59,6 +51,8 @@ export interface CampaignClosePageProps
     queryExternalChangesetWithFileDiffs?: typeof _queryExternalChangesetWithFileDiffs
     /** For testing only. */
     closeCampaign?: typeof _closeCampaign
+    /** For testing only. */
+    willCloseOverwrite?: boolean
 }
 
 export const CampaignClosePage: React.FunctionComponent<CampaignClosePageProps> = ({
@@ -74,7 +68,7 @@ export const CampaignClosePage: React.FunctionComponent<CampaignClosePageProps> 
     queryChangesets = _queryChangesets,
     queryExternalChangesetWithFileDiffs,
     closeCampaign,
-    willClose,
+    willCloseOverwrite,
 }) => {
     const queryChangesetsConnection = useCallback(
         (args: FilteredConnectionQueryArgs) =>
@@ -171,7 +165,7 @@ export const CampaignClosePage: React.FunctionComponent<CampaignClosePageProps> 
                         campaignUpdates,
                         extensionInfo: { extensionsController, hoverifier },
                         queryExternalChangesetWithFileDiffs,
-                        willClose,
+                        willClose: typeof willCloseOverwrite === 'boolean' ? willCloseOverwrite : closeChangesets,
                     }}
                     queryConnection={queryChangesetsConnection}
                     hideSearch={true}
@@ -200,17 +194,4 @@ export const CampaignClosePage: React.FunctionComponent<CampaignClosePageProps> 
             </div>
         </>
     )
-}
-
-function getLSPTextDocumentPositionParameters(
-    hoveredToken: HoveredToken & RepoSpec & RevisionSpec & FileSpec & ResolvedRevisionSpec
-): RepoSpec & RevisionSpec & ResolvedRevisionSpec & FileSpec & UIPositionSpec & ModeSpec {
-    return {
-        repoName: hoveredToken.repoName,
-        revision: hoveredToken.revision,
-        filePath: hoveredToken.filePath,
-        commitID: hoveredToken.commitID,
-        position: hoveredToken,
-        mode: getModeFromPath(hoveredToken.filePath || ''),
-    }
 }
