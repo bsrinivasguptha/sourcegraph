@@ -40,7 +40,7 @@ export const ExternalChangesetNode: React.FunctionComponent<ExternalChangesetNod
     history,
     location,
     extensionInfo,
-    queryExternalChangesetWithFileDiffs = _queryExternalChangesetWithFileDiffs,
+    queryExternalChangesetWithFileDiffs,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false)
     const toggleIsExpanded = useCallback<React.MouseEventHandler<HTMLButtonElement>>(

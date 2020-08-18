@@ -42,7 +42,7 @@ export const ExternalChangesetCloseNode: React.FunctionComponent<ExternalChanges
     history,
     location,
     extensionInfo,
-    queryExternalChangesetWithFileDiffs = _queryExternalChangesetWithFileDiffs,
+    queryExternalChangesetWithFileDiffs,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false)
     const toggleIsExpanded = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
