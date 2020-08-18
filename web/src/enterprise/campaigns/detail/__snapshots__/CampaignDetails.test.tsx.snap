@@ -3,6 +3,7 @@
 exports[`CampaignDetails viewerCanAdminister: false viewing existing 1`] = `
 <CampaignDetails
   campaignID="c"
+  deleteCampaign={[Function]}
   fetchCampaignById={[Function]}
   history="[History]"
   isLightTheme={true}
@@ -20,18 +21,13 @@ exports[`CampaignDetails viewerCanAdminister: false viewing existing 1`] = `
   />
   <CampaignHeader
     actionSection={
-      <React.Fragment>
-        <AnchorLink
-          className="btn btn-outline-danger"
-          data-tooltip="View a preview of all changes that will happen when you close this campaign."
-          to="//close"
-        >
-          <Memo(DeleteIcon)
-            className="icon-inline"
-          />
-           Close
-        </AnchorLink>
-      </React.Fragment>
+      <CampaignDetailsActionSection
+        campaignClosed={false}
+        campaignID="c"
+        campaignNamespaceURL="/users/alice"
+        deleteCampaign={[Function]}
+        history="[History]"
+      />
     }
     className="mb-3"
     createdAt="2020-01-01"
@@ -119,34 +115,42 @@ exports[`CampaignDetails viewerCanAdminister: false viewing existing 1`] = `
           </AnchorLink>
         </span>
       </div>
-      <AnchorLink
-        className="btn btn-outline-danger"
-        data-tooltip="View a preview of all changes that will happen when you close this campaign."
-        to="//close"
+      <CampaignDetailsActionSection
+        campaignClosed={false}
+        campaignID="c"
+        campaignNamespaceURL="/users/alice"
+        deleteCampaign={[Function]}
+        history="[History]"
       >
-        <a
+        <AnchorLink
           className="btn btn-outline-danger"
           data-tooltip="View a preview of all changes that will happen when you close this campaign."
-          href="//close"
+          to="//close"
         >
-          <Memo(DeleteIcon)
-            className="icon-inline"
+          <a
+            className="btn btn-outline-danger"
+            data-tooltip="View a preview of all changes that will happen when you close this campaign."
+            href="//close"
           >
-            <svg
-              className="mdi-icon icon-inline"
-              fill="currentColor"
-              height={24}
-              viewBox="0 0 24 24"
-              width={24}
+            <Memo(DeleteIcon)
+              className="icon-inline"
             >
-              <path
-                d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
-              />
-            </svg>
-          </Memo(DeleteIcon)>
-           Close
-        </a>
-      </AnchorLink>
+              <svg
+                className="mdi-icon icon-inline"
+                fill="currentColor"
+                height={24}
+                viewBox="0 0 24 24"
+                width={24}
+              >
+                <path
+                  d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
+                />
+              </svg>
+            </Memo(DeleteIcon)>
+             Close
+          </a>
+        </AnchorLink>
+      </CampaignDetailsActionSection>
     </div>
   </CampaignHeader>
   <CampaignStatsCard
@@ -759,6 +763,7 @@ exports[`CampaignDetails viewerCanAdminister: false viewing existing 1`] = `
 exports[`CampaignDetails viewerCanAdminister: true viewing existing 1`] = `
 <CampaignDetails
   campaignID="c"
+  deleteCampaign={[Function]}
   fetchCampaignById={[Function]}
   history="[History]"
   isLightTheme={true}
@@ -776,18 +781,13 @@ exports[`CampaignDetails viewerCanAdminister: true viewing existing 1`] = `
   />
   <CampaignHeader
     actionSection={
-      <React.Fragment>
-        <AnchorLink
-          className="btn btn-outline-danger"
-          data-tooltip="View a preview of all changes that will happen when you close this campaign."
-          to="//close"
-        >
-          <Memo(DeleteIcon)
-            className="icon-inline"
-          />
-           Close
-        </AnchorLink>
-      </React.Fragment>
+      <CampaignDetailsActionSection
+        campaignClosed={false}
+        campaignID="c"
+        campaignNamespaceURL="/users/alice"
+        deleteCampaign={[Function]}
+        history="[History]"
+      />
     }
     className="mb-3"
     createdAt="2020-01-01"
@@ -875,34 +875,42 @@ exports[`CampaignDetails viewerCanAdminister: true viewing existing 1`] = `
           </AnchorLink>
         </span>
       </div>
-      <AnchorLink
-        className="btn btn-outline-danger"
-        data-tooltip="View a preview of all changes that will happen when you close this campaign."
-        to="//close"
+      <CampaignDetailsActionSection
+        campaignClosed={false}
+        campaignID="c"
+        campaignNamespaceURL="/users/alice"
+        deleteCampaign={[Function]}
+        history="[History]"
       >
-        <a
+        <AnchorLink
           className="btn btn-outline-danger"
           data-tooltip="View a preview of all changes that will happen when you close this campaign."
-          href="//close"
+          to="//close"
         >
-          <Memo(DeleteIcon)
-            className="icon-inline"
+          <a
+            className="btn btn-outline-danger"
+            data-tooltip="View a preview of all changes that will happen when you close this campaign."
+            href="//close"
           >
-            <svg
-              className="mdi-icon icon-inline"
-              fill="currentColor"
-              height={24}
-              viewBox="0 0 24 24"
-              width={24}
+            <Memo(DeleteIcon)
+              className="icon-inline"
             >
-              <path
-                d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
-              />
-            </svg>
-          </Memo(DeleteIcon)>
-           Close
-        </a>
-      </AnchorLink>
+              <svg
+                className="mdi-icon icon-inline"
+                fill="currentColor"
+                height={24}
+                viewBox="0 0 24 24"
+                width={24}
+              >
+                <path
+                  d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
+                />
+              </svg>
+            </Memo(DeleteIcon)>
+             Close
+          </a>
+        </AnchorLink>
+      </CampaignDetailsActionSection>
     </div>
   </CampaignHeader>
   <CampaignStatsCard
