@@ -13,23 +13,3 @@
         }
     }
 }
-
-.will-close {
-    color: black;
-    animation: flash-red 2s ease-in-out;
-}
-
-@keyframes flash-red {
-    0% {
-        color: black;
-    }
-    25% {
-        color: red;
-    }
-    75% {
-        color: red;
-    }
-    100% {
-        color: black;
-    }
-}

@@ -1,0 +1,21 @@
+.changeset-close-action {
+    &__close-flash {
+        color: black;
+        animation: changeset-close-action__flash-red 2s ease-in-out;
+    }
+}
+
+@keyframes changeset-close-action__flash-red {
+    0% {
+        color: black;
+    }
+    25% {
+        color: red;
+    }
+    75% {
+        color: red;
+    }
+    100% {
+        color: black;
+    }
+}
