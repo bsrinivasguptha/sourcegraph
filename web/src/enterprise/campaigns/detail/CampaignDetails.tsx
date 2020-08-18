@@ -23,6 +23,8 @@ import { CampaignDescription } from './CampaignDescription'
 import { CampaignStatsCard } from './CampaignStatsCard'
 import { CampaignHeader } from './CampaignHeader'
 import { CampaignTabs } from './CampaignTabs'
+import { Link } from '../../../../../shared/src/components/Link'
+import DeleteIcon from 'mdi-react/DeleteIcon'
 
 export interface CampaignDetailsProps
     extends ThemeProps,
@@ -101,6 +103,19 @@ export const CampaignDetails: React.FunctionComponent<CampaignDetailsProps> = ({
                 namespace={campaign.namespace}
                 creator={campaign.initialApplier}
                 createdAt={campaign.createdAt}
+                actionSection={
+                    <>
+                        {!campaign.closedAt && (
+                            <Link
+                                to={`${location.pathname}/close`}
+                                className="btn btn-outline-danger"
+                                data-tooltip="View a preview of all changes that will happen when you close this campaign."
+                            >
+                                <DeleteIcon className="icon-inline" /> Close
+                            </Link>
+                        )}
+                    </>
+                }
                 className="mb-3"
             />
             <CampaignStatsCard closedAt={campaign.closedAt} stats={campaign.changesets.stats} className="mb-3" />
