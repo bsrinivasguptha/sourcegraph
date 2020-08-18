@@ -51,6 +51,7 @@ describe('CampaignDetails', () => {
                     },
                 })
             }
+            deleteCampaign={() => Promise.resolve(undefined)}
             queryChangesetCountsOverTime={() => of([])}
         />
     )

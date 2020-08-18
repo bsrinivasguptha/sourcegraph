@@ -17,6 +17,8 @@ import {
     ChangesetCountsOverTimeVariables,
     ChangesetCountsOverTimeFields,
     ChangesetCountsOverTimeResult,
+    DeleteCampaignResult,
+    DeleteCampaignVariables,
 } from '../../../graphql-operations'
 
 const campaignFragment = gql`
@@ -383,3 +385,17 @@ export const queryChangesetCountsOverTime = ({
             return node.changesetCountsOverTime
         })
     )
+
+export async function deleteCampaign(campaign: Scalars['ID']): Promise<void> {
+    const result = await requestGraphQL<DeleteCampaignResult, DeleteCampaignVariables>({
+        request: gql`
+            mutation DeleteCampaign($campaign: ID!) {
+                deleteCampaign(campaign: $campaign) {
+                    alwaysNil
+                }
+            }
+        `,
+        variables: { campaign },
+    }).toPromise()
+    dataOrThrowErrors(result)
+}
