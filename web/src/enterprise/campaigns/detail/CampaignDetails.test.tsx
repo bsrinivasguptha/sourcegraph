@@ -30,6 +30,7 @@ describe('CampaignDetails', () => {
                 of({
                     __typename: 'Campaign',
                     id: 'c',
+                    url: '/users/alice/campaigns/c',
                     name: 'n',
                     description: 'd',
                     initialApplier: { username: 'alice', url: '/users/alice' },

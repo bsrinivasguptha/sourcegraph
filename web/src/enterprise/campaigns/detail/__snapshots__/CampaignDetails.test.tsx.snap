@@ -402,6 +402,7 @@ exports[`CampaignDetails viewerCanAdminister: false viewing existing 1`] = `
           "url": "/users/alice",
         },
         "updatedAt": "2020-01-01",
+        "url": "/users/alice/campaigns/c",
         "viewerCanAdminister": false,
       }
     }
@@ -1112,6 +1113,7 @@ exports[`CampaignDetails viewerCanAdminister: true viewing existing 1`] = `
           "url": "/users/alice",
         },
         "updatedAt": "2020-01-01",
+        "url": "/users/alice/campaigns/c",
         "viewerCanAdminister": true,
       }
     }

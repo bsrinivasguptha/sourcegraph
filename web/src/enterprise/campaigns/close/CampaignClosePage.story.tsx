@@ -188,6 +188,7 @@ add('Overview', () => {
                 deleted: 10,
             },
             id: 'specid',
+            url: '/users/alice/campaigns/specid',
             namespace: {
                 namespaceName: 'alice',
                 url: '/users/alice',
