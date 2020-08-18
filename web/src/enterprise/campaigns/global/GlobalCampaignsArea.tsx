@@ -1,6 +1,5 @@
 import React from 'react'
 import { RouteComponentProps, Switch, Route } from 'react-router'
-import { CampaignDetails } from '../detail/CampaignDetails'
 import { withAuthenticatedUser } from '../../../auth/withAuthenticatedUser'
 import { ThemeProps } from '../../../../../shared/src/theme'
 import { ExtensionsControllerProps } from '../../../../../shared/src/extensions/controller'
@@ -57,12 +56,6 @@ export const AuthenticatedCampaignsArea = withAuthenticatedUser<AuthenticatedPro
                         render={props => <CampaignListPage {...outerProps} {...props} />}
                         path={match.url}
                         exact={true}
-                    />
-                    <Route
-                        path={`${match.url}/:campaignID`}
-                        render={({ match, ...props }: RouteComponentProps<{ campaignID: string }>) => (
-                            <CampaignDetails {...outerProps} {...props} campaignID={match.params.campaignID} />
-                        )}
                     />
                 </Switch>
                 {/* eslint-enable react/jsx-no-bind */}

@@ -7,6 +7,7 @@ import { OrgCampaignListPageProps } from '../campaigns/list/CampaignListPage'
 import { CampaignApplyPageProps } from '../campaigns/apply/CampaignApplyPage'
 import { RouteComponentProps } from 'react-router'
 import { CampaignDetailsProps } from '../campaigns/detail/CampaignDetails'
+import { CampaignClosePageProps } from '../campaigns/close/CampaignClosePage'
 
 const OrgCampaignListPage = lazyComponent<OrgCampaignListPageProps, 'OrgCampaignListPage'>(
     () => import('../campaigns/list/CampaignListPage'),
@@ -20,6 +21,10 @@ const CampaignDetails = lazyComponent<CampaignDetailsProps, 'CampaignDetails'>(
     () => import('../campaigns/detail/CampaignDetails'),
     'CampaignDetails'
 )
+const CampaignClosePage = lazyComponent<CampaignClosePageProps, 'CampaignClosePage'>(
+    () => import('../campaigns/close/CampaignClosePage'),
+    'CampaignClosePage'
+)
 
 export const enterpriseOrganizationAreaRoutes: readonly OrgAreaRoute[] = [
     ...orgAreaRoutes,
@@ -29,6 +34,16 @@ export const enterpriseOrganizationAreaRoutes: readonly OrgAreaRoute[] = [
         render: ({ match, ...props }: OrgAreaPageProps & RouteComponentProps<{ specID: string }>) => (
             <div className="web-content">
                 <CampaignApplyPage {...props} specID={match.params.specID} />
+            </div>
+        ),
+        condition: ({ isSourcegraphDotCom }) =>
+            !isSourcegraphDotCom && window.context.experimentalFeatures?.automation === 'enabled',
+    },
+    {
+        path: '/campaigns/:campaignID/close',
+        render: ({ match, ...props }: OrgAreaPageProps & RouteComponentProps<{ campaignID: string }>) => (
+            <div className="web-content">
+                <CampaignClosePage {...props} campaignID={match.params.campaignID} />
             </div>
         ),
         condition: ({ isSourcegraphDotCom }) =>

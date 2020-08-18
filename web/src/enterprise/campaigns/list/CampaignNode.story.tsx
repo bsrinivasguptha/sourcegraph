@@ -11,6 +11,7 @@ import { ListCampaign } from '../../../graphql-operations'
 export const nodes: Record<string, ListCampaign> = {
     'Open campaign': {
         id: 'test',
+        url: '/users/alice/campaigns/test',
         name: 'Awesome campaign',
         description: `# What this does
 
@@ -31,6 +32,7 @@ This is my thorough explanation. And it can also get very long, in that case the
     },
     'No description': {
         id: 'test2',
+        url: '/users/alice/campaigns/test2',
         name: 'Awesome campaign',
         description: null,
         createdAt: new Date('2020-05-05').toISOString(),
@@ -49,6 +51,7 @@ This is my thorough explanation. And it can also get very long, in that case the
     },
     'Closed campaign': {
         id: 'test3',
+        url: '/users/alice/campaigns/test3',
         name: 'Awesome campaign',
         description: `# My campaign
 

@@ -5,8 +5,12 @@ import { radios, boolean } from '@storybook/addon-knobs'
 import webStyles from '../../../enterprise.scss'
 import { Tooltip } from '../../../components/tooltip/Tooltip'
 import { CampaignClosePage } from './CampaignClosePage'
-import { queryChangesets as _queryChangesets, queryExternalChangesetWithFileDiffs } from '../detail/backend'
-import { of, Subject } from 'rxjs'
+import {
+    queryChangesets as _queryChangesets,
+    queryExternalChangesetWithFileDiffs,
+    fetchCampaignById,
+} from '../detail/backend'
+import { of } from 'rxjs'
 import { subDays } from 'date-fns'
 import {
     ChangesetExternalState,
@@ -14,6 +18,7 @@ import {
     ChangesetReconcilerState,
     ChangesetCheckState,
     ChangesetReviewState,
+    CampaignFields,
 } from '../../../graphql-operations'
 import { NOOP_TELEMETRY_SERVICE } from '../../../../../shared/src/telemetry/telemetryService'
 
@@ -31,6 +36,41 @@ const { add } = storiesOf('web/campaigns/close/CampaignClosePage', module).addDe
         </>
     )
 })
+
+const campaign: CampaignFields = {
+    __typename: 'Campaign',
+    changesets: {
+        stats: {
+            closed: 1,
+            merged: 2,
+            open: 3,
+            total: 10,
+            unpublished: 5,
+        },
+    },
+    createdAt: subDays(new Date(), 5).toISOString(),
+    initialApplier: {
+        url: '/users/alice',
+        username: 'alice',
+    },
+    diffStat: {
+        added: 10,
+        changed: 8,
+        deleted: 10,
+    },
+    id: 'specid',
+    namespace: {
+        namespaceName: 'alice',
+        url: '/users/alice',
+    },
+    viewerCanAdminister: boolean('viewerCanAdminister', true),
+    closedAt: null,
+    description: '## What this campaign does\n\nTruly awesome things for example.',
+    name: 'awesome-campaign',
+    updatedAt: subDays(new Date(), 5).toISOString(),
+}
+
+const fetchCampaign: typeof fetchCampaignById = () => of(campaign)
 
 const queryChangesets: typeof _queryChangesets = () =>
     of({
@@ -156,8 +196,6 @@ const queryEmptyExternalChangesetWithFileDiffs: typeof queryExternalChangesetWit
         },
     })
 
-const campaignUpdates = new Subject<void>()
-
 add('Overview', () => {
     const history = H.createMemoryHistory()
     return (
@@ -168,11 +206,10 @@ add('Overview', () => {
             queryExternalChangesetWithFileDiffs={queryEmptyExternalChangesetWithFileDiffs}
             willCloseOverwrite={boolean('Will close', true)}
             campaignID="123"
-            campaignUpdates={campaignUpdates}
+            fetchCampaignById={fetchCampaign}
             extensionsController={{} as any}
             platformContext={{} as any}
             telemetryService={NOOP_TELEMETRY_SERVICE}
-            viewerCanAdminister={boolean('viewerCanAdminister', true)}
             isLightTheme={isLightTheme}
         />
     )

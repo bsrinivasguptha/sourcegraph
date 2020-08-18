@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import * as H from 'history'
 import { PageTitle } from '../../../components/PageTitle'
 import { CampaignHeader } from '../detail/CampaignHeader'
@@ -8,6 +8,7 @@ import { Subject } from 'rxjs'
 import {
     queryExternalChangesetWithFileDiffs as _queryExternalChangesetWithFileDiffs,
     queryChangesets as _queryChangesets,
+    fetchCampaignById as _fetchCampaignById,
 } from '../detail/backend'
 import { ThemeProps } from '../../../../../shared/src/theme'
 import { PlatformContextProps } from '../../../../../shared/src/platform/context'
@@ -15,6 +16,10 @@ import { ExtensionsControllerProps } from '../../../../../shared/src/extensions/
 import { TelemetryProps } from '../../../../../shared/src/telemetry/telemetryService'
 import { closeCampaign as _closeCampaign } from './backend'
 import { CampaignCloseChangesetsList } from './CampaignCloseChangesetsList'
+import { useObservable } from '../../../../../shared/src/util/useObservable'
+import { LoadingSpinner } from '@sourcegraph/react-loading-spinner'
+import { HeroPage } from '../../../components/HeroPage'
+import AlertCircleIcon from 'mdi-react/AlertCircleIcon'
 
 export interface CampaignClosePageProps
     extends ThemeProps,
@@ -22,11 +27,11 @@ export interface CampaignClosePageProps
         PlatformContextProps,
         ExtensionsControllerProps {
     campaignID: Scalars['ID']
-    viewerCanAdminister: boolean
     history: H.History
     location: H.Location
-    campaignUpdates: Subject<void>
 
+    /** For testing only. */
+    fetchCampaignById?: typeof _fetchCampaignById
     /** For testing only. */
     queryChangesets?: typeof _queryChangesets
     /** For testing only. */
@@ -39,24 +44,46 @@ export interface CampaignClosePageProps
 
 export const CampaignClosePage: React.FunctionComponent<CampaignClosePageProps> = ({
     campaignID,
-    campaignUpdates,
     history,
     location,
-    viewerCanAdminister,
     extensionsController,
     isLightTheme,
     platformContext,
     telemetryService,
+    fetchCampaignById = _fetchCampaignById,
     queryChangesets,
     queryExternalChangesetWithFileDiffs,
     closeCampaign,
     willCloseOverwrite,
 }) => {
+    const campaignUpdates = useMemo(() => new Subject<void>(), [])
     const [closeChangesets, setCloseChangesets] = useState<boolean>(false)
+    const campaign = useObservable(useMemo(() => fetchCampaignById(campaignID), [campaignID, fetchCampaignById]))
+
+    // Is loading.
+    if (campaign === undefined) {
+        return (
+            <div className="text-center">
+                <LoadingSpinner className="icon-inline mx-auto my-4" />
+            </div>
+        )
+    }
+
+    // Campaign not found.
+    if (campaign === null) {
+        return <HeroPage icon={AlertCircleIcon} title="Campaign not found" />
+    }
+
     return (
         <>
             <PageTitle title="Preview close" />
-            <CampaignHeader name="awesome-campaign" />
+            <CampaignHeader
+                name={campaign.name}
+                namespace={campaign.namespace}
+                creator={campaign.initialApplier}
+                createdAt={campaign.createdAt}
+                className="mb-3"
+            />
             <CampaignCloseAlert
                 campaignID={campaignID}
                 closeChangesets={closeChangesets}
@@ -71,7 +98,7 @@ export const CampaignClosePage: React.FunctionComponent<CampaignClosePageProps> 
                 campaignUpdates={campaignUpdates}
                 history={history}
                 location={location}
-                viewerCanAdminister={viewerCanAdminister}
+                viewerCanAdminister={campaign.viewerCanAdminister}
                 extensionsController={extensionsController}
                 isLightTheme={isLightTheme}
                 platformContext={platformContext}
