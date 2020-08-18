@@ -208,7 +208,6 @@ add('Overview', () => {
             location={history.location}
             queryChangesets={queryChangesets}
             queryExternalChangesetWithFileDiffs={queryEmptyExternalChangesetWithFileDiffs}
-            willCloseOverwrite={boolean('Will close', false)}
             campaignID="123"
             fetchCampaignById={fetchCampaign}
             extensionsController={{} as any}

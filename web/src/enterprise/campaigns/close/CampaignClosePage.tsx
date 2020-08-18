@@ -38,8 +38,6 @@ export interface CampaignClosePageProps
     queryExternalChangesetWithFileDiffs?: typeof _queryExternalChangesetWithFileDiffs
     /** For testing only. */
     closeCampaign?: typeof _closeCampaign
-    /** For testing only. */
-    willCloseOverwrite?: boolean
 }
 
 export const CampaignClosePage: React.FunctionComponent<CampaignClosePageProps> = ({
@@ -54,7 +52,6 @@ export const CampaignClosePage: React.FunctionComponent<CampaignClosePageProps> 
     queryChangesets,
     queryExternalChangesetWithFileDiffs,
     closeCampaign,
-    willCloseOverwrite,
 }) => {
     const campaignUpdates = useMemo(() => new Subject<void>(), [])
     const [closeChangesets, setCloseChangesets] = useState<boolean>(false)
@@ -107,7 +104,7 @@ export const CampaignClosePage: React.FunctionComponent<CampaignClosePageProps> 
                 telemetryService={telemetryService}
                 queryChangesets={queryChangesets}
                 queryExternalChangesetWithFileDiffs={queryExternalChangesetWithFileDiffs}
-                willClose={typeof willCloseOverwrite === 'boolean' ? willCloseOverwrite : closeChangesets}
+                willClose={closeChangesets}
             />
         </>
     )
