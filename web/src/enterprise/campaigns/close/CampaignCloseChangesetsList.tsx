@@ -153,7 +153,7 @@ export const CampaignCloseChangesetsList: React.FunctionComponent<Props> = ({
                 location={location}
                 useURLQuery={true}
                 listComponent="div"
-                listClassName="campaign-changesets__grid mb-3"
+                listClassName="campaign-close-changesets-list__grid mb-3"
                 headComponent={CampaignCloseHeader}
             />
             {hoverState?.hoverOverlayProps && (
