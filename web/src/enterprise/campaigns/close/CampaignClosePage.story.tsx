@@ -21,6 +21,7 @@ import {
     CampaignFields,
 } from '../../../graphql-operations'
 import { NOOP_TELEMETRY_SERVICE } from '../../../../../shared/src/telemetry/telemetryService'
+import { useMemo, useCallback } from '@storybook/addons'
 
 let isLightTheme = true
 const { add } = storiesOf('web/campaigns/close/CampaignClosePage', module).addDecorator(story => {
@@ -36,41 +37,6 @@ const { add } = storiesOf('web/campaigns/close/CampaignClosePage', module).addDe
         </>
     )
 })
-
-const campaign: CampaignFields = {
-    __typename: 'Campaign',
-    changesets: {
-        stats: {
-            closed: 1,
-            merged: 2,
-            open: 3,
-            total: 10,
-            unpublished: 5,
-        },
-    },
-    createdAt: subDays(new Date(), 5).toISOString(),
-    initialApplier: {
-        url: '/users/alice',
-        username: 'alice',
-    },
-    diffStat: {
-        added: 10,
-        changed: 8,
-        deleted: 10,
-    },
-    id: 'specid',
-    namespace: {
-        namespaceName: 'alice',
-        url: '/users/alice',
-    },
-    viewerCanAdminister: boolean('viewerCanAdminister', true),
-    closedAt: null,
-    description: '## What this campaign does\n\nTruly awesome things for example.',
-    name: 'awesome-campaign',
-    updatedAt: subDays(new Date(), 5).toISOString(),
-}
-
-const fetchCampaign: typeof fetchCampaignById = () => of(campaign)
 
 const queryChangesets: typeof _queryChangesets = () =>
     of({
@@ -198,13 +164,50 @@ const queryEmptyExternalChangesetWithFileDiffs: typeof queryExternalChangesetWit
 
 add('Overview', () => {
     const history = H.createMemoryHistory()
+    const viewerCanAdminister = boolean('viewerCanAdminister', true)
+    const campaign: CampaignFields = useMemo(
+        () => ({
+            __typename: 'Campaign',
+            changesets: {
+                stats: {
+                    closed: 1,
+                    merged: 2,
+                    open: 3,
+                    total: 10,
+                    unpublished: 5,
+                },
+            },
+            createdAt: subDays(new Date(), 5).toISOString(),
+            initialApplier: {
+                url: '/users/alice',
+                username: 'alice',
+            },
+            diffStat: {
+                added: 10,
+                changed: 8,
+                deleted: 10,
+            },
+            id: 'specid',
+            namespace: {
+                namespaceName: 'alice',
+                url: '/users/alice',
+            },
+            viewerCanAdminister,
+            closedAt: null,
+            description: '## What this campaign does\n\nTruly awesome things for example.',
+            name: 'awesome-campaign',
+            updatedAt: subDays(new Date(), 5).toISOString(),
+        }),
+        [viewerCanAdminister]
+    )
+    const fetchCampaign: typeof fetchCampaignById = useCallback(() => of(campaign), [campaign])
     return (
         <CampaignClosePage
             history={history}
             location={history.location}
             queryChangesets={queryChangesets}
             queryExternalChangesetWithFileDiffs={queryEmptyExternalChangesetWithFileDiffs}
-            willCloseOverwrite={boolean('Will close', true)}
+            willCloseOverwrite={boolean('Will close', false)}
             campaignID="123"
             fetchCampaignById={fetchCampaign}
             extensionsController={{} as any}

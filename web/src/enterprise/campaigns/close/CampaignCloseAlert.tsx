@@ -9,6 +9,7 @@ import { Scalars } from '../../../graphql-operations'
 export interface CampaignCloseAlertProps {
     campaignID: Scalars['ID']
     closeChangesets: boolean
+    viewerCanAdminister: boolean
     setCloseChangesets: (newValue: boolean) => void
     history: H.History
     location: H.Location
@@ -20,6 +21,7 @@ export const CampaignCloseAlert: React.FunctionComponent<CampaignCloseAlertProps
     campaignID,
     closeChangesets,
     setCloseChangesets,
+    viewerCanAdminister,
     history,
     location,
     closeCampaign = _closeCampaign,
@@ -54,15 +56,21 @@ export const CampaignCloseAlert: React.FunctionComponent<CampaignCloseAlertProps
                     </p>
                     <p>By default, all changesets remain untouched.</p>
                     <p>
-                        <input type="checkbox" checked={closeChangesets} onChange={onChangeCloseChangesets} /> Also
-                        close open changesets on code hosts.
+                        <input
+                            type="checkbox"
+                            checked={closeChangesets}
+                            onChange={onChangeCloseChangesets}
+                            disabled={isClosing === true || !viewerCanAdminister}
+                        />{' '}
+                        Also close open changesets on code hosts.
                     </p>
+                    {!viewerCanAdminister && <p className="text-warning">You cannot modify this campaign.</p>}
                     <div className="d-flex justify-content-end">
                         <button
                             type="button"
                             className="btn btn-secondary mr-3"
                             onClick={onCancel}
-                            disabled={isClosing === true}
+                            disabled={isClosing === true || !viewerCanAdminister}
                         >
                             Cancel
                         </button>
@@ -70,7 +78,7 @@ export const CampaignCloseAlert: React.FunctionComponent<CampaignCloseAlertProps
                             type="button"
                             className="btn btn-danger"
                             onClick={onClose}
-                            disabled={isClosing === true}
+                            disabled={isClosing === true || !viewerCanAdminister}
                         >
                             {isClosing === true && <LoadingSpinner className="icon-inline" />} Close campaign
                         </button>

@@ -91,8 +91,10 @@ export const CampaignClosePage: React.FunctionComponent<CampaignClosePageProps> 
                 history={history}
                 location={location}
                 closeCampaign={closeCampaign}
+                viewerCanAdminister={campaign.viewerCanAdminister}
             />
-            <h2>Closing the campaign will close the following changesets:</h2>
+            {closeChangesets && <h2>Closing the campaign will close the following changesets:</h2>}
+            {!closeChangesets && <h2>The following changesets will remain open:</h2>}
             <CampaignCloseChangesetsList
                 campaignID={campaignID}
                 campaignUpdates={campaignUpdates}
