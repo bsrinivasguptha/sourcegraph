@@ -114,6 +114,48 @@ func TestAddExternalService(t *testing.T) {
 				t.Fatalf("NamespaceUserID: want %d but got %d", userID, *result.externalService.NamespaceUserID)
 			}
 		})
+
+		t.Run("user mode with disallowed fields", func(t *testing.T) {
+			conf.Mock(&conf.Unified{
+				SiteConfiguration: schema.SiteConfiguration{
+					ExternalServiceUserMode: "public",
+				},
+			})
+			defer conf.Mock(nil)
+
+			ctx := actor.WithActor(context.Background(), &actor.Actor{UID: 1})
+			userID := MarshalUserID(1)
+
+			tests := []struct {
+				name    string
+				config  string
+				wantErr string
+			}{
+				{
+					name:    "repositoryPathPattern",
+					config:  `{"url": "https://github.com", "repositoryPathPattern": "github/{nameWithOwner}" // comments}`,
+					wantErr: `field "repositoryPathPattern" is not allowed to be used by users`,
+				},
+			}
+			for _, test := range tests {
+				t.Run(test.name, func(t *testing.T) {
+					result, err := (&schemaResolver{}).AddExternalService(ctx, &addExternalServiceArgs{
+						Input: addExternalServiceInput{
+							Config:    test.config,
+							Namespace: &userID,
+						},
+					})
+
+					got := fmt.Sprintf("%v", err)
+					if got != test.wantErr {
+						t.Errorf("err: want %q but got %q", test.wantErr, got)
+					}
+					if result != nil {
+						t.Errorf("result: want nil but got %v", result)
+					}
+				})
+			}
+		})
 	})
 
 	db.Mocks.Users.GetByCurrentAuthUser = func(context.Context) (*types.User, error) {

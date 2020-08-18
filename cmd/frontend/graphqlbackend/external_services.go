@@ -12,6 +12,7 @@ import (
 	"github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
 	"github.com/pkg/errors"
+	"github.com/tidwall/gjson"
 
 	"github.com/sourcegraph/sourcegraph/cmd/frontend/backend"
 	"github.com/sourcegraph/sourcegraph/cmd/frontend/graphqlbackend/graphqlutil"
@@ -37,6 +38,19 @@ type addExternalServiceInput struct {
 	Namespace   *graphql.ID
 }
 
+// checkDisallowedExternalServiceField checks if the external service config
+// contains any disallowed field and return the path to the field when found.
+func checkDisallowedExternalServiceField(config string) (string, bool) {
+	disallowedFields := []string{"repositoryPathPattern"}
+	results := gjson.GetMany(config, disallowedFields...)
+	for i, r := range results {
+		if r.Exists() {
+			return disallowedFields[i], true
+		}
+	}
+	return "", false
+}
+
 func (r *schemaResolver) AddExternalService(ctx context.Context, args *addExternalServiceArgs) (*externalServiceResolver, error) {
 	if os.Getenv("EXTSVC_CONFIG_FILE") != "" && !extsvcConfigAllowEdits {
 		return nil, errors.New("adding external service not allowed when using EXTSVC_CONFIG_FILE")
@@ -49,6 +63,11 @@ func (r *schemaResolver) AddExternalService(ctx context.Context, args *addExtern
 	if args.Input.Namespace != nil {
 		if !enabled {
 			return nil, errors.New("allow users to add external services is not enabled")
+		}
+
+		field, found := checkDisallowedExternalServiceField(args.Input.Config)
+		if found {
+			return nil, errors.Errorf("field %q is not allowed to be used by users", field)
 		}
 
 		var err error
